@@ -41,7 +41,8 @@ def capture(charge, amount=None):
     sync_charge_from_stripe_data(stripe_charge)
 
 
-def create(amount, customer, source=None, currency="usd", description=None, send_receipt=settings.PINAX_STRIPE_SEND_EMAIL_RECEIPTS, capture=True, destination=None):
+def create(amount, customer, source=None, currency="usd", description=None, capture=True, destination=None,
+           application_fee=None, send_receipt=settings.PINAX_STRIPE_SEND_EMAIL_RECEIPTS):
     """
     Creates a charge for the given customer.
 
@@ -68,7 +69,8 @@ def create(amount, customer, source=None, currency="usd", description=None, send
         customer=customer,
         description=description,
         capture=capture,
-        destination=destination
+        destination=destination,
+        application_fee=application_fee
     )
     charge = sync_charge_from_stripe_data(stripe_charge)
     if send_receipt:
