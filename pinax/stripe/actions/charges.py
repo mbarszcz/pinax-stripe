@@ -70,7 +70,7 @@ def create(amount, customer, source=None, currency="usd", description=None, capt
         description=description,
         capture=capture,
         destination=destination,
-        application_fee=application_fee
+        application_fee=utils.convert_amount_for_api(application_fee, currency)
     )
     charge = sync_charge_from_stripe_data(stripe_charge)
     if send_receipt:
