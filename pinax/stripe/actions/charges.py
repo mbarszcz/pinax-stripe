@@ -62,6 +62,10 @@ def create(amount, customer, source=None, currency="usd", description=None, capt
         raise ValueError(
             "You must supply a decimal value representing dollars."
         )
+    application_fee_converted = None
+    if application_fee:
+	application_fee_converted = utils.convert_amount_for_api(application_fee, currency)
+
     stripe_charge = stripe.Charge.create(
         amount=utils.convert_amount_for_api(amount, currency),  # find the final amount
         currency=currency,
@@ -70,7 +74,7 @@ def create(amount, customer, source=None, currency="usd", description=None, capt
         description=description,
         capture=capture,
         destination=destination,
-        application_fee=utils.convert_amount_for_api(application_fee, currency)
+        application_fee=application_fee_converted
     )
     charge = sync_charge_from_stripe_data(stripe_charge)
     if send_receipt:
